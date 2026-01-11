@@ -47,7 +47,7 @@ const HomePage = () => {
       <div className='container mx-auto space-y-10'>
         <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4'>
           <h2 className='text-2xl sm:text-3xl font-bold tracking-tight'>Your friends</h2>
-          <Link to={"/notification"} className='flex justify-center items-center btn btn-sm btn-outline'>
+          <Link to={"/notifications"} className='flex justify-center items-center btn btn-sm btn-outline'>
             <UserIcon className='mr-2 size-4' />
             Friend Requests
           </Link>
