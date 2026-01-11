@@ -6,17 +6,15 @@ import Notifications from './pages/NotificationPage'
 import CallPage from './pages/CallPage'
 import Onboarding from './pages/OnBoardingPage'
 import { Toaster } from 'react-hot-toast'
-import ProtectRoute from './protectedRoute'
 import PageLoader from './components/PageLoader'
 import useAuthUser from './hooks/useAuthUser'
-import ProtectedRoot from './protectedRoot'
-import AllFriends from './pages/AllFriends'
+import ProtectedRoot from './ProtectedRoot'
 import { useThemeStore } from './store/useThemeStore'
 import Layout from './components/Layout'
 import ChatPage from './pages/ChatPage'
 
 function App() {
-  const { isLoading, authUser,error } = useAuthUser();
+  const { isLoading, authUser } = useAuthUser();
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.isOnboarded;
   const {theme} = useThemeStore();
