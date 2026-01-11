@@ -1,4 +1,4 @@
-import friendRequest from "../models/friendRequest.js";
+import FriendRequest from "../models/friendRequest.js";
 import User from "../models/User.js";
 
 async function getRecommendedusers(req, res) {
@@ -55,7 +55,7 @@ async function sendFriendRequest(req, res) {
             });
         }
 
-        const existingRequest = await friendRequest.findOne({
+        const existingRequest = await FriendRequest.findOne({
             $or: [
                 { sender: myId, recipient: recipientId },
                 { sender: recipientId, recipient: myId },
@@ -68,7 +68,7 @@ async function sendFriendRequest(req, res) {
             });
         }
 
-        const newRequest = await friendRequest.create({
+        const newRequest = await FriendRequest.create({
             sender: myId,
             recipient: recipientId,
         });
@@ -83,7 +83,7 @@ async function sendFriendRequest(req, res) {
 async function acceptFriendRequest(req, res) {
     try {
         const { id: requestId } = req.params;
-        const FriendRequest = await friendRequest.findById(requestId);
+        const FriendRequest = await FriendRequest.findById(requestId);
 
         if (!FriendRequest) {
             return res.status(404).json({ message: "Friend request not found" });
@@ -112,12 +112,12 @@ async function acceptFriendRequest(req, res) {
 
 async function getFriendRequest(req, res) {
     try {
-        const incomingReqs = await friendRequest.find({
+        const incomingReqs = await FriendRequest.find({
             recipient: req.user._id,
             status: "pending"
         }).populate("sender", "fullname profilePic nativeLanguage learningLanguage");
 
-        const acceptedReqs = await friendRequest.find({
+        const acceptedReqs = await FriendRequest.find({
             sender: req.user._id,
             status: "accepted"
         }).populate("recipient", "fullname profilePic");
@@ -131,7 +131,7 @@ async function getFriendRequest(req, res) {
 
 async function getOutGoingFriendsReqs(req, res) {
     try {
-        const outGoingRequests = await friendRequest.find({
+        const outGoingRequests = await FriendRequest.find({
             sender: req.user._id,
             status: "pending"
         }).populate("recipient", "fullname profilePic nativeLanguage learningLanguage");
