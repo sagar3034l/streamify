@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken } from "./lib/api";
-import { StreamChat } from "Stream-chat"
+import { StreamChat } from "stream-chat"
 
 import {
     Channel,  
