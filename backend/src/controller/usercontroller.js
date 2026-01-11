@@ -1,4 +1,4 @@
-import FriendRequest from "../models/friendRequest.js";
+import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
 
 async function getRecommendedusers(req, res) {
@@ -83,24 +83,26 @@ async function sendFriendRequest(req, res) {
 async function acceptFriendRequest(req, res) {
     try {
         const { id: requestId } = req.params;
-        const FriendRequest = await FriendRequest.findById(requestId);
+        const request = await FriendRequest.findById(requestId);
 
-        if (!FriendRequest) {
+        if (!request) {
             return res.status(404).json({ message: "Friend request not found" });
         }
 
-        if (FriendRequest.recipient.toString() !== req.user.id) {
+        if (request.recipient.toString() !== req.user.id) {
             return res.status(403).json({ message: "You are not authorized to accept the request" });
         }
-        FriendRequest.status = "accepted";
-        await FriendRequest.save();
 
-        await User.findByIdAndUpdate(FriendRequest.recipient, {
-            $addToSet: { friends: FriendRequest.sender }
+        request.status = "accepted";
+        await request.save();
+
+        // Update both users' friend lists
+        await User.findByIdAndUpdate(request.recipient, {
+            $addToSet: { friends: request.sender }
         });
 
-        await User.findByIdAndUpdate(FriendRequest.sender, {
-            $addToSet: { friends: FriendRequest.recipient }
+        await User.findByIdAndUpdate(request.sender, {
+            $addToSet: { friends: request.recipient }
         });
 
         res.status(200).json({ message: "Friend request accepted" });
@@ -109,6 +111,7 @@ async function acceptFriendRequest(req, res) {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+
 
 async function getFriendRequest(req, res) {
     try {
